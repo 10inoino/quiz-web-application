@@ -5,7 +5,7 @@
 
 クイズのルールについては [RULES.md](./RULES.md) を参照してください。
 
-<video src="sample_movie.mov" controls width="100%"></video>
+<video src='https://github.com/user-attachments/assets/2c731653-b1ef-47bd-bcf9-18c1c4432545'></video>
 
 ---
 
