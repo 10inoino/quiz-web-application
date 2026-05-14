@@ -5,6 +5,8 @@
 
 クイズのルールについては [RULES.md](./RULES.md) を参照してください。
 
+<video src="sample_movie.mov" controls width="100%"></video>
+
 ---
 
 ## 目次
