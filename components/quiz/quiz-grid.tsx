@@ -38,7 +38,7 @@ export function QuizGrid({ questions, usedQuestions, onSelectQuestion, onReset }
               className={cn(
                 "relative flex items-center justify-center rounded-lg text-4xl md:text-5xl lg:text-6xl font-bold transition-all duration-300",
                 isUsed
-                  ? "bg-muted text-muted-foreground cursor-not-allowed opacity-50"
+                  ? "bg-sky-100 text-sky-300 cursor-not-allowed"
                   : "bg-blue-800 text-white hover:bg-blue-700 hover:scale-105 hover:shadow-xl cursor-pointer active:scale-95"
               )}
             >

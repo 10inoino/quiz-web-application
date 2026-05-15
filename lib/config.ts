@@ -21,11 +21,11 @@ export const QUIZ_CONFIG = {
   GRID_ROWS: 7,
 
   /**
-   * 倍速タイマー音に切り替える経過秒数のしきい値
-   * この秒数を経過すると、タイマー音が通常速度から倍速に切り替わります。
+   * タイマー音を2倍速に切り替える経過秒数のしきい値
+   * この秒数を経過すると、timer.mp3 から timer-fast.mp3 に切り替わります。
    * ANSWER_DURATION_SECONDS より小さい値を設定してください。
    */
-  FAST_TIMER_THRESHOLD_SECONDS: 25,
+  TIMER_SPEED_2X_THRESHOLD_SECONDS: 20,
 
   /**
    * タイマー開始前のディレイ（秒）

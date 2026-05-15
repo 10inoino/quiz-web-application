@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, useRef } from "react"
-import { playTimerSound, playTimerFastSound, stopTimerSound, stopNormalTimerSound, playTimeUpSound } from "@/lib/sounds"
+import { playTimerSound, playTimerFastSound, stopTimerSound, playTimeUpSound } from "@/lib/sounds"
 import { QUIZ_CONFIG } from "@/lib/config"
 
 interface TimerBarProps {
@@ -17,9 +17,9 @@ export function TimerBar({ duration, delay, onComplete, isActive }: TimerBarProp
   const [delayRemaining, setDelayRemaining] = useState(delay)
   const [elapsedSeconds, setElapsedSeconds] = useState(0)
   const hasPlayedTimerSound = useRef(false)
-  const hasPlayedFastSound = useRef(false)
+  const currentSpeedRef = useRef<1 | 2>(1)
   const onCompleteRef = useRef(onComplete)
-  
+
   // onCompleteの最新値を保持
   useEffect(() => {
     onCompleteRef.current = onComplete
@@ -33,7 +33,7 @@ export function TimerBar({ duration, delay, onComplete, isActive }: TimerBarProp
       setDelayRemaining(delay)
       setElapsedSeconds(0)
       hasPlayedTimerSound.current = false
-      hasPlayedFastSound.current = false
+      currentSpeedRef.current = 1
       stopTimerSound()
     }
   }, [isActive, delay])
@@ -58,13 +58,12 @@ export function TimerBar({ duration, delay, onComplete, isActive }: TimerBarProp
   useEffect(() => {
     if (!started || !isActive) return
 
-    // タイマー開始時に効果音を再生
     if (!hasPlayedTimerSound.current) {
       playTimerSound()
       hasPlayedTimerSound.current = true
     }
 
-    const intervalMs = 100 // 100msごとに更新
+    const intervalMs = 100
     const decrement = 100 / (duration * 10)
     let currentProgress = 100
 
@@ -85,28 +84,24 @@ export function TimerBar({ duration, delay, onComplete, isActive }: TimerBarProp
     return () => clearInterval(timer)
   }, [started, isActive, duration])
 
-  // 経過秒数カウント（別のuseEffectで管理）
+  // 経過秒数カウント
   useEffect(() => {
     if (!started || !isActive) return
 
     const secondsTimer = setInterval(() => {
-      setElapsedSeconds((prev) => {
-        const next = prev + 1
-        console.log("[v0] elapsedSeconds:", next)
-        return next
-      })
+      setElapsedSeconds((prev) => prev + 1)
     }, 1000)
 
     return () => clearInterval(secondsTimer)
   }, [started, isActive])
 
-  // しきい値秒数を経過したら倍速タイマー音に切り替え
+  // 経過秒数に応じてタイマー音ファイルを切り替え（等倍 → 2倍速 → 4倍速）
   useEffect(() => {
-    if (started && elapsedSeconds >= QUIZ_CONFIG.FAST_TIMER_THRESHOLD_SECONDS && !hasPlayedFastSound.current) {
-      console.log("[v0] Switching to fast timer sound")
-      stopNormalTimerSound()
+    if (!started) return
+
+    if (elapsedSeconds >= QUIZ_CONFIG.TIMER_SPEED_2X_THRESHOLD_SECONDS && currentSpeedRef.current < 2) {
       playTimerFastSound()
-      hasPlayedFastSound.current = true
+      currentSpeedRef.current = 2
     }
   }, [started, elapsedSeconds])
 
